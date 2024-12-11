@@ -1,0 +1,59 @@
+{
+    "rides": [
+        {
+            "id": "1",
+            "source": "Hyderabad",
+            "destination": "Visakhapatnam",
+            "vehicleType": "Sedan",
+            "driverName": "Rajesh Kumar",
+            "fare": 1800,
+            "availableSeats": 3,
+            "filledSeats": 1,
+            "estimatedPickupAt": "2024-11-21T08:30:00Z"
+        },
+        {
+            "id": "2",
+            "source": "Hyderabad",
+            "destination": "Visakhapatnam",
+            "vehicleType": "SUV",
+            "driverName": "Anil Reddy",
+            "fare": 2400,
+            "availableSeats": 4,
+            "filledSeats": 2,
+            "estimatedPickupAt": "2024-11-21T10:00:00Z"
+        },
+        {
+            "id": "3",
+            "source": "Hyderabad",
+            "destination": "Visakhapatnam",
+            "vehicleType": "Hatchback",
+            "driverName": "Meena Devi",
+            "fare": 1500,
+            "availableSeats": 2,
+            "filledSeats": 3,
+            "estimatedPickupAt": "2024-11-21T14:00:00Z"
+        },
+        {
+            "id": "4",
+            "source": "Visakhapatnam",
+            "destination": "Hyderabad",
+            "vehicleType": "Sedan",
+            "driverName": "Ravi Teja",
+            "fare": 1800,
+            "availableSeats": 3,
+            "filledSeats": 2,
+            "estimatedPickupAt": "2024-11-21T12:30:00Z"
+        },
+        {
+            "id": "5",
+            "source": "Visakhapatnam",
+            "destination": "Hyderabad",
+            "vehicleType": "SUV",
+            "driverName": "Kiran Kumar",
+            "fare": 2500,
+            "availableSeats": 4,
+            "filledSeats": 1,
+            "estimatedPickupAt": "2024-11-21T16:00:00Z"
+        }
+    ]
+}

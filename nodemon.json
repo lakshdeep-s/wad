@@ -1,0 +1,5 @@
+{
+    "watch": ["src", "config", "public"],
+    "exec": "node src/index.js",
+    "ext": ".js,.html"
+}

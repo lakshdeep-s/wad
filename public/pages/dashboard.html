@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Pooler.io</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+</head>
+
+<body class="grid-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidenav">
+        <h2>Welcome, <span id="username"></span>!</h2>
+        <ul class="nav-links">
+            <li><a href="/dashboard" class="active">Search Rides</a></li>
+            <li><a href="/dashboard/activeRides">Active Rides</a></li>
+            <li><a href="/dashboard/completedRides">Completed Rides</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section class="search-section">
+            <h2>Search for Rides</h2>
+            <form id="rideSearchForm">
+                <div class="form-group">
+                    <label for="source">Source</label>
+                    <select id="source" required>
+                        <option value="Hyderabad">Hyderabad</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="destination">Destination</label>
+                    <select id="destination" required>
+                        <option value="Visakhapatnam">Visakhapatnam</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="vehicleType">Vehicle Type</label>
+                    <select id="vehicleType" required>
+                        <option value="Any">Any</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Hatchback">Hatchback</option>
+                    </select>
+                </div>
+                <button type="submit" class="form-button">Search</button>
+            </form>
+        </section>
+
+        <section id="results" class="results-section">
+            <h2>Available Rides</h2>
+            <div id="ridesContainer" class="rides-container">
+                <!-- Search results will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="../scripts/dashboard.js"></script>
+</body>
+
+</html>

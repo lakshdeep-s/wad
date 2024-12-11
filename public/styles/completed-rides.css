@@ -1,0 +1,69 @@
+.sidenav {
+    background-color: #f4f4f4;
+    padding: 20px;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.sidenav h2 {
+    font-size: 1.5rem;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.sidenav span {
+    color: var(--clr-primary);
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+}
+
+.nav-links li {
+    margin: 10px 0;
+}
+
+.nav-links a {
+    color: black;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.nav-links a.active {
+    font-weight: bold;
+    color: var(--clr-primary);
+}
+
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+#completedRidesSection, #cancelledRidesSection {
+    margin-top: 20px;
+}
+
+#completedRidesContainer, #cancelledRidesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ride-card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.ride-card h3 {
+    margin-bottom: 10px;
+}
+
+.ride-card p {
+    margin: 5px 0;
+}

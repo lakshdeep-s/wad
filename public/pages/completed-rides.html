@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rides Summary | Pooler.io</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/completed-rides.css">
+</head>
+
+<body class="grid-layout">
+    <aside class="sidenav">
+        <h2>Welcome, <span id="username"></span>!</h2>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Search Rides</a></li>
+            <li><a href="/dashboard/activeRides">Active Rides</a></li>
+            <li><a href="/dashboard/completedRides" class="active">Ride Summary</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <section id="completedRidesSection">
+            <h2>Your Completed Rides</h2>
+            <div id="completedRidesContainer">
+                <!-- Completed rides will be dynamically loaded -->
+            </div>
+        </section>
+
+        <section id="cancelledRidesSection">
+            <h2>Your Cancelled Rides</h2>
+            <div id="cancelledRidesContainer">
+                <!-- Cancelled rides will be dynamically loaded -->
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="../scripts/completed-rides.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Rides | Pooler.io</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/active-rides.css">
+</head>
+
+<body class="grid-layout">
+    <aside class="sidenav">
+        <h2>Welcome, <span id="username"></span>!</h2>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Search Rides</a></li>
+            <li><a href="/dashboard/activeRides" class="active">Active Rides</a></li>
+            <li><a href="/dashboard/completedRides">Completed Rides</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <section id="activeRideSection">
+            <h2>Your Active Ride</h2>
+            <div id="activeRideContainer">
+                <!-- Active ride details will be dynamically loaded -->
+            </div>
+            <button id="completeRideButton" class="form-button">Complete Ride</button>
+            <button id="cancelRideButton" class="form-button">Cancel Ride</button>
+        </section>
+    </main>
+
+    <script type="module" src="../scripts/active-rides.js"></script>
+</body>
+
+</html>
