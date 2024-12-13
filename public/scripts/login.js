@@ -1,28 +1,26 @@
-document.querySelector(".logout-btn").addEventListener("click", ()=> {
-    window.localStorage.removeItem("user")
-    window.location.href= "/login" 
-})
 document.getElementById("loginForm").addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent form submission from refreshing the page
 
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    // Retrieve user credentials from localStorage
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    // Retrieve user and driver credentials from localStorage
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const drivers = JSON.parse(localStorage.getItem("drivers") || "[]");
 
-    if (!storedUser) {
-        alert("User Credentials Not Found ! Create an account instead")
-    }
+    const user = users.find(user => user.username === username);
+    const driver = drivers.find(driver => driver.username === username);
 
-    if (storedUser.isAdmin && storedUser.username ===username && storedUser.password === password) {
-        alert("Login Successfull")
-        window.location.href="/admin-dashboard"
-    } else if (storedUser.username === username && storedUser.password === password){
-        alert("Login successful!");
+    // Check user and driver credentials
+    if (user && user.password === password) {
+        alert("Login Successful, redirecting to dashboard...");
+        localStorage.setItem("user", JSON.stringify(user));
         window.location.href = "/dashboard";
-    }
-    else {
-        alert("Invalid username or password. Please try again.")
+    } else if (driver && driver.password === password) {
+        alert("Login Successful, redirecting to admin dashboard...");
+        localStorage.setItem("user", JSON.stringify(driver));
+        window.location.href = "/admin-dashboard";
+    } else {
+        alert("Invalid username or password.");
     }
 });

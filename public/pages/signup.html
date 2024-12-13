@@ -155,14 +155,32 @@
             }
 
             // Store user data in localStorage
-            localStorage.setItem("user", JSON.stringify(userData));
+            if (!localStorage.getItem("users")){
+                localStorage.setItem("users", JSON.stringify([]))
+            } 
+            if (!localStorage.getItem("drivers")){
+                localStorage.setItem("drivers", JSON.stringify([])) 
+            }
+
+            const usersArray = JSON.parse(window.localStorage.getItem("users"))
+            const driversArray = JSON.parse(window.localStorage.getItem("drivers"))
+
+            if (userData.isDriver) {
+                driversArray.push(userData)
+                localStorage.setItem("drivers", JSON.stringify(driversArray))
+            } else {
+                usersArray.push(userData)
+                localStorage.setItem("users", JSON.stringify(usersArray))
+            }
 
             // Redirect based on user type
-            if (isDriver) {
-                window.location.href = "/admin-dashboard";
-            } else {
-                window.location.href = "/dashboard";
-            }
+            // if (isDriver) {
+            //     window.location.href = "/admin-dashboard";
+            // } else {
+            //     window.location.href = "/dashboard";
+            // }
+            alert("Succesfully created account, Redirecting to login page...")
+            window.location.href ="/login"
         });
     </script>
 </body>

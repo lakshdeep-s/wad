@@ -1,10 +1,15 @@
 // Updated dashboard.js
 
 // Ride data (mimicking the JSON file content)
-const loggedInUser = window.localStorage.getItem("user") || "John Doe";
+const loggedInUser = JSON.parse(localStorage.getItem("user")) || {};
+console.log(loggedInUser)
+
+if (loggedInUser.isDriver) {
+    window.location.href="/admin-dashboard"
+}
 
 document.querySelector(".logout-btn").addEventListener("click", () => {
-    alert("Loggin Out Of Account...");
+    alert("Logging Out Of Account...");
 
     window.localStorage.removeItem("user")
     window.location.href = "/login"
@@ -89,7 +94,8 @@ function populateSelectOptions(rideData) {
 }
 
 // Display username in the sidebar
-document.getElementById("username").textContent = loggedInUser.username; 
+const username = document.getElementById("username").textContent = loggedInUser.username; 
+console.log(username)
 
 // Event listener for ride search form
 document.getElementById("rideSearchForm").addEventListener("submit", (event) => {
@@ -128,6 +134,7 @@ document.getElementById("rideSearchForm").addEventListener("submit", (event) => 
             button.addEventListener("click", (event) => {
                 const rideIndex = event.target.getAttribute("data-index");
                 const selectedRide = filteredRides[rideIndex];
+                selectedRide["bookedBy"]=username
 
                 const activeRides = JSON.parse(localStorage.getItem("activeRides")) || [];
                 activeRides.push(selectedRide);

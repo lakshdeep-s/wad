@@ -20,6 +20,31 @@
             font-size: 1rem;
             cursor: pointer;
         }
+
+        .ride-item {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+        }
+
+        .ride-buttons button {
+            margin-right: 0.5rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .view-btn {
+            background-color: #42a5f5;
+            color: white;
+        }
+
+        .end-btn {
+            background-color: #ef5350;
+            color: white;
+        }
     </style>
 </head>
 
@@ -28,8 +53,7 @@
     <aside class="sidenav">
         <h2>Welcome, <span id="username"></span>!</h2>
         <ul class="nav-links">
-            <li><a href="/admin-dashboard" class="active">Active Rides</a></li>
-            <li><a href="/admin-dashboard/completedRides">Completed Rides</a></li>
+            <li><a href="/admin-dashboard" class="active">Overview</a></li>
             <button class="logout-btn">
                 Logout
             </button>
@@ -86,7 +110,7 @@
             };
 
             // Render rides into the given container
-            const renderRides = (rides, container) => {
+            const renderRides = (rides, container, isActive = true) => {
                 container.innerHTML = ""; // Clear container
                 if (rides.length === 0) {
                     container.innerHTML = "<p>No rides available.</p>";
@@ -99,11 +123,36 @@
                         <h3>${ride.source} to ${ride.destination}</h3>
                         <p>Vehicle: ${ride.vehicleType}</p>
                         <p>Driver: ${ride.driverName}</p>
+                        <p>Booked By: ${ride.bookedBy}</p>
                         <p>Pickup: ${new Date(ride.estimatedPickupAt).toLocaleString()}</p>
+                        <div class="ride-buttons">
+                            <button class="view-btn">View Details</button>
+                            ${isActive ? '<button class="end-btn">End Ride</button>' : ""}
+                        </div>
                     `;
-                    rideElement.addEventListener("click", () => {
-                        alert(`Ride Details:\nSource: ${ride.source}\nDestination: ${ride.destination}\nVehicle: ${ride.vehicleType}\nDriver: ${ride.driverName}\nFare: ${ride.fare}\nAvailable Seats: ${ride.availableSeats}\nPickup: ${new Date(ride.estimatedPickupAt).toLocaleString()}`);
+
+                    // View Details button functionality
+                    rideElement.querySelector(".view-btn").addEventListener("click", () => {
+                        alert(`Ride Details:\nSource: ${ride.source}\nDestination: ${ride.destination}\nVehicle: ${ride.vehicleType}\nDriver: ${ride.driverName}\nBooked By: ${ride.bookedBy}\nFare: ${ride.fare}\nAvailable Seats: ${ride.availableSeats}\nPickup: ${new Date(ride.estimatedPickupAt).toLocaleString()}`);
                     });
+
+                    // End Ride button functionality (only for active rides)
+                    if (isActive) {
+                        rideElement.querySelector(".end-btn").addEventListener("click", () => {
+                            // Remove from activeRides
+                            const updatedActiveRides = activeRides.filter(r => r !== ride);
+                            localStorage.setItem("activeRides", JSON.stringify(updatedActiveRides));
+
+                            // Add to completedRides
+                            completedRides.push(ride);
+                            localStorage.setItem("completedRides", JSON.stringify(completedRides));
+
+                            // Re-render rides
+                            renderRides(updatedActiveRides, activeRidesContainer, true);
+                            renderRides(completedRides, completedRidesContainer, false);
+                        });
+                    }
+
                     container.appendChild(rideElement);
                 });
             };
@@ -113,10 +162,9 @@
                 completed: filterRides(completedRides, user.username)
             };
 
-            renderRides(userRides.active, activeRidesContainer);
-            renderRides(userRides.completed, completedRidesContainer);
+            renderRides(userRides.active, activeRidesContainer, true);
+            renderRides(userRides.completed, completedRidesContainer, false);
         });
-
     </script>
 </body>
 
