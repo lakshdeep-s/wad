@@ -36,6 +36,10 @@ app.get("/login", async (req, res) => {
     return res.sendFile(path.resolve("public", "pages/login.html"))
 })
 
+app.get("/admin-dashboard", async(req, res)=> {
+    return res.sendFile(path.resolve("public", "pages/admin-dashboard.html"))
+})
+
 const server = createServer(app)
 const PORT = config.serverConfig.port
 

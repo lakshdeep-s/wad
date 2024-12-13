@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Pooler.io</title>
+    <link rel="stylesheet" href="../styles/global.css">
+    <link rel="stylesheet" href="../styles/admin-dashboard.css">
+
+    <style>
+        .logout-btn {
+            padding: 0.5rem 0.5rem 0.5rem 1rem;
+            text-align: left;
+            width: 100%;
+            color: white;
+            background-color: rgba(42, 198, 206, 0.33);
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .ride-item {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+        }
+
+        .ride-buttons button {
+            margin-right: 0.5rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .view-btn {
+            background-color: #42a5f5;
+            color: white;
+        }
+
+        .end-btn {
+            background-color: #ef5350;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="grid-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidenav">
+        <h2>Welcome, <span id="username"></span>!</h2>
+        <ul class="nav-links">
+            <li><a href="/admin-dashboard" class="active">Overview</a></li>
+            <button class="logout-btn">
+                Logout
+            </button>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <section id="activeRides" class="rides-section">
+            <h2>Active Rides</h2>
+            <div id="activeRidesContainer" class="rides-container">
+                <!-- Active rides will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <section id="completedRides" class="rides-section">
+            <h2>Completed Rides</h2>
+            <div id="completedRidesContainer" class="rides-container">
+                <!-- Completed rides will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        document.addEventListener("DOMContentLoaded", () => {
+            const logoutBtn = document.querySelector(".logout-btn");
+            logoutBtn.addEventListener("click", () => {
+                window.localStorage.removeItem("user");
+                window.location.href = "/login";
+            });
+
+            const user = JSON.parse(localStorage.getItem("user"));
+
+            if (!user || !user.isDriver) {
+                window.location.href = "/login";
+                return;
+            }
+
+            document.getElementById("username").textContent = user.username;
+
+            const activeRides = JSON.parse(localStorage.getItem("activeRides")) || [];
+            const completedRides = JSON.parse(localStorage.getItem("completedRides")) || [];
+
+            const activeRidesContainer = document.getElementById("activeRidesContainer");
+            const completedRidesContainer = document.getElementById("completedRidesContainer");
+
+            // Filter rides for the current driver
+            const filterRides = (rides, username) => {
+                if (!Array.isArray(rides)) {
+                    console.error("Rides data is not an array:", rides);
+                    return [];
+                }
+                return rides.filter(ride => ride.driverName === username);
+            };
+
+            // Render rides into the given container
+            const renderRides = (rides, container, isActive = true) => {
+                container.innerHTML = ""; // Clear container
+                if (rides.length === 0) {
+                    container.innerHTML = "<p>No rides available.</p>";
+                    return;
+                }
+                rides.forEach(ride => {
+                    const rideElement = document.createElement("div");
+                    rideElement.classList.add("ride-item");
+                    rideElement.innerHTML = `
+                        <h3>${ride.source} to ${ride.destination}</h3>
+                        <p>Vehicle: ${ride.vehicleType}</p>
+                        <p>Driver: ${ride.driverName}</p>
+                        <p>Booked By: ${ride.bookedBy}</p>
+                        <p>Pickup: ${new Date(ride.estimatedPickupAt).toLocaleString()}</p>
+                        <div class="ride-buttons">
+                            <button class="view-btn">View Details</button>
+                            ${isActive ? '<button class="end-btn">End Ride</button>' : ""}
+                        </div>
+                    `;
+
+                    // View Details button functionality
+                    rideElement.querySelector(".view-btn").addEventListener("click", () => {
+                        alert(`Ride Details:\nSource: ${ride.source}\nDestination: ${ride.destination}\nVehicle: ${ride.vehicleType}\nDriver: ${ride.driverName}\nBooked By: ${ride.bookedBy}\nFare: ${ride.fare}\nAvailable Seats: ${ride.availableSeats}\nPickup: ${new Date(ride.estimatedPickupAt).toLocaleString()}`);
+                    });
+
+                    // End Ride button functionality (only for active rides)
+                    if (isActive) {
+                        rideElement.querySelector(".end-btn").addEventListener("click", () => {
+                            // Remove from activeRides
+                            const updatedActiveRides = activeRides.filter(r => r !== ride);
+                            localStorage.setItem("activeRides", JSON.stringify(updatedActiveRides));
+
+                            // Add to completedRides
+                            completedRides.push(ride);
+                            localStorage.setItem("completedRides", JSON.stringify(completedRides));
+
+                            // Re-render rides
+                            renderRides(updatedActiveRides, activeRidesContainer, true);
+                            renderRides(completedRides, completedRidesContainer, false);
+                        });
+                    }
+
+                    container.appendChild(rideElement);
+                });
+            };
+
+            const userRides = {
+                active: filterRides(activeRides, user.username),
+                completed: filterRides(completedRides, user.username)
+            };
+
+            renderRides(userRides.active, activeRidesContainer, true);
+            renderRides(userRides.completed, completedRidesContainer, false);
+        });
+    </script>
+</body>
+
+</html>

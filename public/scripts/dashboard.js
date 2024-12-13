@@ -1,7 +1,20 @@
-// Sample user credentials for demonstration
-const loggedInUser = JSON.parse(localStorage.getItem("user")) || { username: "Guest" };
+// Updated dashboard.js
 
 // Ride data (mimicking the JSON file content)
+const loggedInUser = JSON.parse(localStorage.getItem("user")) || {};
+console.log(loggedInUser)
+
+if (loggedInUser.isDriver) {
+    window.location.href="/admin-dashboard"
+}
+
+document.querySelector(".logout-btn").addEventListener("click", () => {
+    alert("Logging Out Of Account...");
+
+    window.localStorage.removeItem("user")
+    window.location.href = "/login"
+});
+
 const rideData = {
     rides: [
         {
@@ -25,31 +38,73 @@ const rideData = {
             estimatedPickupAt: "2024-11-21T12:00:00"
         },
         {
-            source: "Hyderabad",
-            destination: "Visakhapatnam",
-            vehicleType: "Hatchback",
-            driverName: "Laxman Choudhary",
-            fare: 1200,
+            source: "Mumbai",
+            destination: "Pune",
+            vehicleType: "Sedan",
+            driverName: "Anita Desai",
+            fare: 700,
             availableSeats: 2,
-            filledSeats: 3,
-            estimatedPickupAt: "2024-11-21T08:00:00"
+            filledSeats: 1,
+            estimatedPickupAt: "2024-11-22T14:00:00"
+        },
+        {
+            source: "Bangalore",
+            destination: "Mysore",
+            vehicleType: "Hatchback",
+            driverName: "Priya Sharma",
+            fare: 800,
+            availableSeats: 3,
+            filledSeats: 2,
+            estimatedPickupAt: "2024-11-21T07:30:00"
+        },
+        {
+            source: "Chennai",
+            destination: "Coimbatore",
+            vehicleType: "Sedan",
+            driverName: "Lakshdeep Singh",
+            fare: 2000,
+            availableSeats: 4,
+            filledSeats: 0,
+            estimatedPickupAt: "2024-11-21T10:00:00"
         }
     ]
 };
 
+// Populate source and destination options dynamically
+function populateSelectOptions(rideData) {
+    const sourceSelect = document.getElementById("source");
+    const destinationSelect = document.getElementById("destination");
+
+    const sources = [...new Set(rideData.rides.map((ride) => ride.source))];
+    const destinations = [...new Set(rideData.rides.map((ride) => ride.destination))];
+
+    sources.forEach((source) => {
+        const option = document.createElement("option");
+        option.value = source;
+        option.textContent = source;
+        sourceSelect.appendChild(option);
+    });
+
+    destinations.forEach((destination) => {
+        const option = document.createElement("option");
+        option.value = destination;
+        option.textContent = destination;
+        destinationSelect.appendChild(option);
+    });
+}
+
 // Display username in the sidebar
-document.getElementById("username").textContent = loggedInUser.username;
+const username = document.getElementById("username").textContent = loggedInUser.username; 
+console.log(username)
 
 // Event listener for ride search form
 document.getElementById("rideSearchForm").addEventListener("submit", (event) => {
     event.preventDefault();
 
-    // Collect user inputs
     const source = document.getElementById("source").value;
     const destination = document.getElementById("destination").value;
     const vehicleType = document.getElementById("vehicleType").value;
 
-    // Filter rides based on user inputs
     const filteredRides = rideData.rides.filter((ride) => {
         return (
             ride.source === source &&
@@ -58,9 +113,8 @@ document.getElementById("rideSearchForm").addEventListener("submit", (event) => 
         );
     });
 
-    // Display results
     const ridesContainer = document.getElementById("ridesContainer");
-    ridesContainer.innerHTML = ""; // Clear previous results
+    ridesContainer.innerHTML = "";
 
     if (filteredRides.length > 0) {
         filteredRides.forEach((ride, index) => {
@@ -76,12 +130,16 @@ document.getElementById("rideSearchForm").addEventListener("submit", (event) => 
             ridesContainer.appendChild(rideElement);
         });
 
-        // Add event listeners to "Select" buttons
         document.querySelectorAll(".select-ride-button").forEach((button) => {
             button.addEventListener("click", (event) => {
                 const rideIndex = event.target.getAttribute("data-index");
                 const selectedRide = filteredRides[rideIndex];
-                localStorage.setItem("activeRide", JSON.stringify(selectedRide));
+                selectedRide["bookedBy"]=username
+
+                const activeRides = JSON.parse(localStorage.getItem("activeRides")) || [];
+                activeRides.push(selectedRide);
+                localStorage.setItem("activeRides", JSON.stringify(activeRides));
+
                 alert("Ride confirmed successfully!");
                 window.location.href = "/dashboard/activeRides";
             });
@@ -90,3 +148,6 @@ document.getElementById("rideSearchForm").addEventListener("submit", (event) => 
         ridesContainer.innerHTML = "<p>No rides available for the selected criteria.</p>";
     }
 });
+
+// Initialize dropdowns on page load
+populateSelectOptions(rideData);

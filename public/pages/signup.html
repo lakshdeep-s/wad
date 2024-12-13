@@ -13,7 +13,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: calc(100vh - 100px); /* Accounts for header and footer */
+            min-height: calc(100vh - 100px);
             gap: 24px;
         }
 
@@ -37,6 +37,12 @@
             font-size: 1rem;
         }
 
+        .form-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .form-button {
             padding: 12px;
             background-color: var(--clr-primary);
@@ -51,6 +57,16 @@
 
         .form-button:hover {
             background-color: rgba(229, 253, 78, 0.8);
+        }
+
+        .car-details {
+            display: none;
+        }
+
+        .car-details.show {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
     </style>
 </head>
@@ -84,6 +100,20 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" name="password" required class="form-input" placeholder="Enter your password">
 
+                <div class="form-checkbox">
+                    <input type="checkbox" id="isDriver" name="isDriver" class="form-input">
+                    <label for="isDriver" class="form-label">Signup as a Driver?</label>
+                </div>
+
+                <!-- Section for signup if the signup is for a driver -->
+                <div class="car-details" id="carDetails">
+                    <label for="carType" class="form-label">Vehicle Type</label>
+                    <input type="text" id="carType" name="carType" class="form-input" placeholder="Enter vehicle type">
+
+                    <label for="carName" class="form-label">Vehicle Name</label>
+                    <input type="text" id="carName" name="carName" class="form-input" placeholder="Car name">
+                </div>
+
                 <button type="submit" class="form-button">Signup</button>
             </form>
         </div>
@@ -96,18 +126,61 @@
 
     <!-- Script -->
     <script>
+        const isDriverCheckbox = document.getElementById("isDriver");
+        const carDetailsSection = document.getElementById("carDetails");
+
+        // Show/hide car details based on isDriver checkbox
+        isDriverCheckbox.addEventListener("change", () => {
+            if (isDriverCheckbox.checked) {
+                carDetailsSection.classList.add("show");
+            } else {
+                carDetailsSection.classList.remove("show");
+            }
+        });
+
         document.getElementById("signupForm").addEventListener("submit", function (event) {
             event.preventDefault(); // Prevent the form from refreshing the page
 
             const email = document.getElementById("email").value;
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
+            const isDriver = isDriverCheckbox.checked;
 
-            // Save credentials to localStorage
-            localStorage.setItem("user", JSON.stringify({ email, username, password }));
+            let userData = { email, username, password, isDriver };
 
-            // Redirect to the dashboard
-            window.location.href = "/dashboard";
+            if (isDriver) {
+                const carType = document.getElementById("carType").value;
+                const carName = document.getElementById("carName").value;
+                userData = { ...userData, carType, carName };
+            }
+
+            // Store user data in localStorage
+            if (!localStorage.getItem("users")){
+                localStorage.setItem("users", JSON.stringify([]))
+            } 
+            if (!localStorage.getItem("drivers")){
+                localStorage.setItem("drivers", JSON.stringify([])) 
+            }
+
+            const usersArray = JSON.parse(window.localStorage.getItem("users"))
+            const driversArray = JSON.parse(window.localStorage.getItem("drivers"))
+
+            if (userData.isDriver) {
+                driversArray.push(userData)
+                localStorage.setItem("drivers", JSON.stringify(driversArray))
+            } else {
+                usersArray.push(userData)
+                localStorage.setItem("users", JSON.stringify(usersArray))
+            }
+
+            // Redirect based on user type
+            // if (isDriver) {
+            //     window.location.href = "/admin-dashboard";
+            // } else {
+            //     window.location.href = "/dashboard";
+            // }
+            alert("Succesfully created account, Redirecting to login page...")
+            window.location.href ="/login"
         });
     </script>
 </body>

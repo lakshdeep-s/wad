@@ -4,15 +4,23 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    // Retrieve user credentials from localStorage
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    // Retrieve user and driver credentials from localStorage
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const drivers = JSON.parse(localStorage.getItem("drivers") || "[]");
 
-    if (storedUser && storedUser.username === username && storedUser.password === password) {
-        // Successful login
-        alert("Login successful!");
+    const user = users.find(user => user.username === username);
+    const driver = drivers.find(driver => driver.username === username);
+
+    // Check user and driver credentials
+    if (user && user.password === password) {
+        alert("Login Successful, redirecting to dashboard...");
+        localStorage.setItem("user", JSON.stringify(user));
         window.location.href = "/dashboard";
+    } else if (driver && driver.password === password) {
+        alert("Login Successful, redirecting to admin dashboard...");
+        localStorage.setItem("user", JSON.stringify(driver));
+        window.location.href = "/admin-dashboard";
     } else {
-        // Invalid credentials
-        alert("Invalid username or password. Please try again.");
+        alert("Invalid username or password.");
     }
 });

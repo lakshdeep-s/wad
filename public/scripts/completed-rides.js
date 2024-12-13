@@ -2,6 +2,11 @@
 const loggedInUser = JSON.parse(localStorage.getItem("user")) || { username: "Guest" };
 document.getElementById("username").textContent = loggedInUser.username;
 
+document.querySelector(".logout-btn").addEventListener("click", ()=> {
+    window.localStorage.removeItem("user")
+    window.location.href= "/login" 
+})
+
 // Load completed and cancelled rides from localStorage
 const completedRides = JSON.parse(localStorage.getItem("completedRides")) || [];
 const cancelledRides = JSON.parse(localStorage.getItem("canceledRides")) || [];
