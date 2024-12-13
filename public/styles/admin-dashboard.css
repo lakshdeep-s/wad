@@ -1,0 +1,83 @@
+/* Admin Dashboard CSS */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    min-height: 100vh;
+}
+
+/* Sidebar Navigation */
+.sidenav {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.sidenav h2 {
+    margin-bottom: 1rem;
+}
+
+.sidenav .nav-links {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.sidenav .nav-links li {
+    margin: 1rem 0;
+}
+
+.sidenav .nav-links a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidenav .nav-links a:hover,
+.sidenav .nav-links a.active {
+    background-color: #34495e;
+}
+
+/* Main Content */
+.main-content {
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.rides-section {
+    margin-bottom: 2rem;
+}
+
+.rides-section h2 {
+    margin-bottom: 1rem;
+}
+
+.rides-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.ride-item {
+    background-color: #ecf0f1;
+    padding: 1rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.ride-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
